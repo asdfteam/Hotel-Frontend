@@ -1,0 +1,27 @@
+﻿@page "/counter"
+
+<h1>Counter</h1>
+
+<p>Current count: @_currentCount</p>
+
+<div>
+
+    <ul>
+        @foreach (var s in slist)
+        {
+            <li>@s</li>
+        }
+    </ul>
+</div>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int _currentCount = 0;
+    List<string> slist = new List<string>{"String", "hello", "world"};
+
+    private void IncrementCount()
+    {
+        _currentCount++;
+    }
+}
