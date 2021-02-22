@@ -1,0 +1,65 @@
+﻿@page "/login"
+@using Hotel_Frontend.Models
+@using HttpClientImpl
+@using Newtonsoft.Json
+@inject IHttpClientImpl HttpClientImpl
+@inject NavigationManager NavManager
+
+<div class="card m-2">
+    <h3 class="card-header">Login</h3>
+    <div class="card-body">
+        <EditForm EditContext="@_editContext" OnValidSubmit="Callback" @onreset="HandleSubmit">
+            <div class="alert">
+                <label>@_errorMessage</label>
+            </div>
+            <div class="form-row">
+                <label>Username</label>
+                <InputText @bind-Value="_customerModel.UserName" class="form-control"/>
+            </div>
+            <div class="form-row">
+                <label>Password</label>
+                <InputText @bind-Value="_customerModel.Password" type="password" class="form-control"/>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mr-1">Submit</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private EditContext _editContext;
+    private LoginModel _customerModel = new LoginModel();
+    private const string FixedUri = "http://localhost:5000";
+    private string _errorMessage;
+
+    protected override void OnInitialized()
+    {
+        _editContext = new EditContext(_customerModel);
+        _errorMessage = null;
+    }
+
+    private async void Callback(EditContext obj)
+    {
+        const string relativeUri = "/login";
+        var jsonModel = JsonConvert.SerializeObject(_customerModel);
+        //415
+        var response = await HttpClientImpl.Post(FixedUri + relativeUri, jsonModel);
+        if (response.IsSuccessStatusCode)
+        {
+            //something something auth here
+            NavManager.NavigateTo("/mysite", true);
+        }
+        else
+        {
+            _errorMessage = "Wrong username or password!";
+        }
+    }
+
+    private void HandleSubmit()
+    {
+        _customerModel = new LoginModel();
+        _editContext = new EditContext(_customerModel);
+    }
+
+}

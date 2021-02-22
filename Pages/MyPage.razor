@@ -1,0 +1,25 @@
+﻿@page "/mysite"
+@attribute [Authorize]
+@using HotelLibrary
+@using HttpClientImpl
+<h2>My page</h2>
+
+<div class="myreservations">
+    <ul>
+        @foreach (var reservation in reservations)
+        {
+            <li>@reservation</li>  
+        }
+    </ul>
+</div>
+
+@code {
+   
+    private List<Reservation> reservations;
+
+    private async void GetReservations()
+    {
+        //Hent reservasjoner...
+    }
+
+}

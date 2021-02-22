@@ -1,0 +1,56 @@
+﻿@page "/register"
+@using HotelLibrary
+@using System.ComponentModel.DataAnnotations
+@using Hotel_Frontend.Models
+<div class="card m-3">
+    <h3 class="card-header">Register</h3>
+    <div class="card-body">
+        <EditForm EditContext="@editContext" OnValidSubmit="Callback" @onreset="HandleReset">
+            <DataAnnotationsValidator />
+            <div class="form-row">
+                <label>Name</label>
+                <InputText @bind-Value="customer.CustomerName" class="form-control" />
+                <ValidationMessage For="@(() => customer.CustomerName)"/>
+            </div>
+            <div class="form-row">
+                <label>Username</label>
+                <InputText @bind-Value="customer.Username" class="form-control" />
+                <ValidationMessage For="@(() => customer.Username)"/>
+            </div>
+            <div class="form-row">
+                <label>Password</label>
+                <InputText @bind-Value="customer.Password" type="password" class="form-control"/>
+                <ValidationMessage For="@(() => customer.Password)"/>
+            </div>
+            <div class="form-row form-check">
+                <label>Repeat password</label>
+                <InputText type="password" @bind-Value="customer.RepeatPassword" class="form-control"/>
+                <ValidationMessage For="@(() => customer.RepeatPassword)"/>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mr-1">Submit</button>
+                <button type="reset" class="btn btn-secondary">Cancel</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Model customer = new Model();
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(customer);
+    }
+
+    private void Callback(EditContext obj)
+    {
+    }
+
+    private void HandleReset()
+    {
+        customer = new Model();
+        editContext = new EditContext(customer);
+    }
+}
