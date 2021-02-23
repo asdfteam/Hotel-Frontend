@@ -1,0 +1,13 @@
+﻿@inject IAuthenticationService AuthenticationService
+@page "/logout"
+@using Hotel_Frontend.Services
+
+<h3>You have been logged out.</h3>
+
+@code {
+    protected override async void OnInitialized()
+    {
+        await AuthenticationService.Logout();
+    }
+
+}

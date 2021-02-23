@@ -2,30 +2,39 @@
 @using HotelLibrary
 @using System.ComponentModel.DataAnnotations
 @using Hotel_Frontend.Models
+@using Hotel_Frontend.Services
+@using HttpClientImpl
+@using Newtonsoft.Json
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavManager
+
+
+
+
 <div class="card m-3">
     <h3 class="card-header">Register</h3>
     <div class="card-body">
-        <EditForm EditContext="@editContext" OnValidSubmit="Callback" @onreset="HandleReset">
+        <EditForm EditContext="@_editContext" OnValidSubmit="Callback" @onreset="HandleReset">
             <DataAnnotationsValidator />
             <div class="form-row">
                 <label>Name</label>
-                <InputText @bind-Value="customer.CustomerName" class="form-control" />
-                <ValidationMessage For="@(() => customer.CustomerName)"/>
+                <InputText @bind-Value="_customer.CustomerName" class="form-control" />
+                <ValidationMessage For="@(() => _customer.CustomerName)"/>
             </div>
             <div class="form-row">
                 <label>Username</label>
-                <InputText @bind-Value="customer.Username" class="form-control" />
-                <ValidationMessage For="@(() => customer.Username)"/>
+                <InputText @bind-Value="_customer.Username" class="form-control" />
+                <ValidationMessage For="@(() => _customer.Username)"/>
             </div>
             <div class="form-row">
                 <label>Password</label>
-                <InputText @bind-Value="customer.Password" type="password" class="form-control"/>
-                <ValidationMessage For="@(() => customer.Password)"/>
+                <InputText @bind-Value="_customer.Password" type="password" class="form-control"/>
+                <ValidationMessage For="@(() => _customer.Password)"/>
             </div>
             <div class="form-row form-check">
                 <label>Repeat password</label>
-                <InputText type="password" @bind-Value="customer.RepeatPassword" class="form-control"/>
-                <ValidationMessage For="@(() => customer.RepeatPassword)"/>
+                <InputText type="password" @bind-Value="_customer.RepeatPassword" class="form-control"/>
+                <ValidationMessage For="@(() => _customer.RepeatPassword)"/>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary mr-1">Submit</button>
@@ -36,21 +45,27 @@
 </div>
 
 @code {
-    private Model customer = new Model();
-    private EditContext editContext;
+    private Model _customer = new Model();
+    private EditContext _editContext;
+    private string FixedUri = "http://localhost:5000";
 
     protected override void OnInitialized()
     {
-        editContext = new EditContext(customer);
+        if (AuthenticationService.User != null)
+        {
+            NavManager.NavigateTo("/mysite");
+        }
+        _editContext = new EditContext(_customer);
     }
 
-    private void Callback(EditContext obj)
+    private async void Callback()
     {
+        
     }
 
     private void HandleReset()
     {
-        customer = new Model();
-        editContext = new EditContext(customer);
+        _customer = new Model();
+        _editContext = new EditContext(_customer);
     }
 }

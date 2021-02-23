@@ -1,0 +1,36 @@
+﻿@using HotelLibrary
+@using HttpClientImpl
+@using Hotel_Frontend.Models
+@page "/newreservation"
+
+
+<div class="card m-3">
+    <h3 class="card-header">Book a Room!</h3>
+    <div class="card-body">
+        <EditForm EditContext="@_editContext" OnValidSubmit="Callback" @onreset="HandleReset"></EditForm>
+    </div>
+</div>
+
+@code {
+    EditContext _editContext;
+    ReservationModel _model = new ReservationModel();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _editContext = new EditContext(_model);
+    }
+
+
+    private void Callback()
+    {
+        
+    }
+
+    private void HandleReset()
+    {
+        _model = new ReservationModel();
+        _editContext = new EditContext(_model);
+    }
+
+}

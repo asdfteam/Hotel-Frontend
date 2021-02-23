@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Hotel_Frontend.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,9 +21,13 @@ namespace Hotel_Frontend
 
             builder.Services
                 .AddScoped(sp => new HttpClient {BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)})
-                .AddScoped<IHttpClientImpl, HttpClientImpl>();
-            //Service deps.
+                .AddScoped<IHttpClientImpl, HttpClientImpl>()
+                .AddScoped<ILocalStorageService, LocalStorageService>()
+                .AddScoped<IAuthenticationService, AuthenticationService>();
+
             var host = builder.Build();
+            var authService = host.Services.GetRequiredService<IAuthenticationService>();
+            await authService.Initialize();
 
             await builder.Build().RunAsync();
         }

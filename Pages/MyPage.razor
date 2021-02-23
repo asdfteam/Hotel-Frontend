@@ -1,20 +1,27 @@
 ﻿@page "/mysite"
-@attribute [Authorize]
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavManager
 @using HotelLibrary
-@using HttpClientImpl
+@using Hotel_Frontend.Services
 <h2>My page</h2>
 
 <div class="myreservations">
     <ul>
-        @foreach (var reservation in reservations)
-        {
-            <li>@reservation</li>  
-        }
+        <li>HEllo</li>
     </ul>
 </div>
 
 @code {
-   
+
+    protected override async void OnInitialized()
+    {
+        if (AuthenticationService.User == null)
+        {
+            NavManager.NavigateTo("/login");
+        }
+
+    }
+
     private List<Reservation> reservations;
 
     private async void GetReservations()
