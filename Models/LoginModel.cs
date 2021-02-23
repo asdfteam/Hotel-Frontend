@@ -11,7 +11,6 @@ namespace Hotel_Frontend.Models
 
         public new string UserName { get; set; }
         public new string Password { get; set; }
-        public string AuthData { get; set; }
         public int CustomerId { get; set; }
 
         public LoginModel()
@@ -21,7 +20,6 @@ namespace Hotel_Frontend.Models
         {
             UserName = username;
             Password = password;
-            AuthData = null;
         }
     }
 }

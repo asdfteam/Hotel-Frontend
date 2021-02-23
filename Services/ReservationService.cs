@@ -15,8 +15,7 @@ namespace Hotel_Frontend.Services
         public ReservationModel Reservation { get; set; }
         public void SetReservation(ReservationModel reservation);
         public ReservationModel GetReservation();
-        public Task CreateReservation(ReservationModel model);
-        public Task PostReservation(int customerid);
+        public Task PostReservation(int customerid, ReservationModel model);
     }
     public class ReservationService : IReservationService
     {
@@ -39,12 +38,7 @@ namespace Hotel_Frontend.Services
             return Reservation;
         }
 
-        public Task CreateReservation(ReservationModel model)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task PostReservation(int customerid)
+        public Task PostReservation(int customerid, ReservationModel model)
         {
             throw new System.NotImplementedException();
         }

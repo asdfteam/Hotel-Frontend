@@ -1,4 +1,41 @@
 ﻿@page "/"
 
-<h1>Hotel Hight</h1>
+<div class="body">
+    <div class="card">
+        <div class="card-header"><h1>Hotel Hight</h1></div>
+        <div class="card-body">
+            <p>Welcome to the magical Hotel Hight! Founded by the asdfteam in 2021...</p>
+        </div>
+    </div>
+    @if (ShowReservationForm)
+    {
+        <button class="button-index" @onclick="SetVisibility">Hide Form</button>
+    }
+    else
+    {
+        <button class="button-index" @onclick="SetVisibility">Show Form</button>
+    }
+    <div class="card">
+        @if (ShowReservationForm)
+        {
+            <NewReservation />
+        }
+    </div>
+</div>
+
+@code
+{
+    bool ShowReservationForm { get; set; }
+
+    private void SetVisibility()
+    {
+        ShowReservationForm = !ShowReservationForm;
+    }
+
+    protected override void OnInitialized()
+    {
+        ShowReservationForm = false;
+        base.OnInitialized();
+    }
+}
 

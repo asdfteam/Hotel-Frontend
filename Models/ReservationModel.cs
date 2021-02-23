@@ -15,13 +15,12 @@ namespace Hotel_Frontend.Models
         [Required]
         [Display(Name = "Put in your end date")]
         public new DateTime EndDate { get; set; }
-        [MaxLength(10)]
+        
         [Required]
         [Display(Name = "Type in preferred number of single beds")]
-        public new int DoubleBeds { get; set; }
-        [MaxLength(10)]
+        public new int SingleBeds { get; set; }
         [Required]
         [Display(Name = "Type in preferred number of double beds")]
-        public new int SingleBeds { get; set; }
+        public new int DoubleBeds { get; set; }
     }
 }

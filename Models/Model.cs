@@ -7,7 +7,7 @@ using HotelLibrary;
 
 namespace Hotel_Frontend.Models
 {
-    internal class Model : Customer
+    public class Model : Customer
     {
         [Required]
         [Display(Name = "Full name")]

@@ -6,6 +6,7 @@
 @inject IHttpClientImpl HttpClientImpl
 @inject NavigationManager NavManager
 @inject IAuthenticationService AuthenticationService
+@inject IReservationService ReservationService
 
 <div class="card m-2">
     <h3 class="card-header">Login</h3>
@@ -14,6 +15,12 @@
             <div class="alert">
                 <label>@_errorMessage</label>
             </div>
+            @if (ReservationService.Reservation != null && InfoMessage != null)
+            {
+                <div class="alert">
+                    <label>@InfoMessage</label>
+                </div>
+            }
             <div class="form-row">
                 <label>Username</label>
                 <InputText @bind-Value="_customerModel.UserName" class="form-control"/>
@@ -37,6 +44,7 @@
     private LoginModel _customerModel = new LoginModel();
     private const string FixedUri = "http://localhost:5000";
     private string _errorMessage;
+    public string InfoMessage { get; set; } = "You need to log in before creating a new reservation. Don't worry, your reservation is saved.";
 
     protected override void OnInitialized()
     {
@@ -51,6 +59,7 @@
 
     private async void Callback()
     {
+        InfoMessage = null;
         try
         {
             await AuthenticationService.Login(_customerModel);

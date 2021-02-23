@@ -1,13 +1,41 @@
 ﻿@using HotelLibrary
 @using HttpClientImpl
 @using Hotel_Frontend.Models
+@using Hotel_Frontend.Services
 @page "/newreservation"
+@inject IReservationService ReservationService
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavManager
 
 
 <div class="card m-3">
     <h3 class="card-header">Book a Room!</h3>
     <div class="card-body">
-        <EditForm EditContext="@_editContext" OnValidSubmit="Callback" @onreset="HandleReset"></EditForm>
+        <EditForm EditContext="@_editContext" OnValidSubmit="Callback" @onreset="HandleReset">
+            <DataAnnotationsValidator/>
+            <div class="form-group">
+                <div class="form-row">
+                    <InputDate @bind-Value="_model.StartDate" class="form-control"></InputDate>
+                    <ValidationMessage For="(() => _model.StartDate)"></ValidationMessage>
+                </div>
+                <div class="form-row">
+                    <InputDate @bind-Value="_model.EndDate" class="form-control"></InputDate>
+                    <ValidationMessage For="(() => _model.EndDate)"></ValidationMessage>
+                </div>
+                <div class="form-row">
+                    <InputNumber @bind-Value="_model.SingleBeds" class="form-control"></InputNumber>
+                    <ValidationMessage For="(() => _model.SingleBeds)"></ValidationMessage>
+                </div>
+                <div class="form-row">
+                    <InputNumber @bind-Value="_model.DoubleBeds" class="form-control"></InputNumber>
+                    <ValidationMessage For="(() => _model.DoubleBeds)"></ValidationMessage>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mr-1">Submit</button>
+                    <button type="reset" class="btn btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </EditForm>
     </div>
 </div>
 
@@ -21,11 +49,12 @@
         _editContext = new EditContext(_model);
     }
 
-
     private void Callback()
     {
-        
+        ReservationService.SetReservation(_model);
+        NavManager.NavigateTo(AuthenticationService.User != null ? "/confirmation" : "/login");
     }
+
 
     private void HandleReset()
     {

@@ -15,6 +15,7 @@ namespace Hotel_Frontend.Services
         Task Initialize();
         Task Login(LoginModel model);
         Task Logout();
+        Task RegisterModel(Model model);
     }
     public class AuthenticationService : IAuthenticationService
     {
@@ -43,9 +44,7 @@ namespace Hotel_Frontend.Services
             var response = await _httpClient.Post(uri, jsonModel);
             if (response.IsSuccessStatusCode)
             {
-                var authString = $"{model.UserName}";
                 User = model;
-                User.AuthData = authString;
                 var result = await response.Content.ReadAsStringAsync();
                 User.CustomerId = JsonConvert.DeserializeObject<LoginModel>(result).CustomerId;
                 await _localStorage.SetItem("user", User);
@@ -61,6 +60,22 @@ namespace Hotel_Frontend.Services
             User = null;
             await _localStorage.RemoveItem("user");
             _navigationManager.NavigateTo("/");
+        }
+
+        public async Task RegisterModel(Model model)
+        {
+            const string uri = "http://localhost:5000/register";
+            var jsonModel = JsonConvert.SerializeObject(model);
+            var response = await _httpClient.Post(uri, jsonModel);
+            if (response.IsSuccessStatusCode)
+            {
+                var loginModel = new LoginModel(model.Username, model.Password);
+                await Login(loginModel);
+            }
+            else
+            {
+                throw new Exception(response.ReasonPhrase);
+            }
         }
     }
 }
