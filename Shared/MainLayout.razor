@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@inject IAuthenticationService AuthenticationService
+@using Hotel_Frontend.Services
+@inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar">
@@ -7,9 +9,18 @@
 
     <div class="main">
         <div class="top-row px-4">
-            <NavLink class="nav-link" href="logout">
-                <span class="oi oi-home" aria-hidden="true"></span>Logout
-            </NavLink>
+            @if (AuthenticationService.User == null)
+            {
+                <NavLink class="nav-link" href="login">
+                    <span class="oi oi-home" aria-hidden="true"></span>Login
+                </NavLink>
+            }
+            else 
+            {
+                <NavLink class="nav-link" href="logout">
+                    <span class="oi oi-home" aria-hidden="true"></span>Logout
+                </NavLink>
+            }
         </div>
 
         <div class="content px-4">

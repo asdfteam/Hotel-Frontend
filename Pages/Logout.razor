@@ -8,6 +8,7 @@
     protected override async void OnInitialized()
     {
         await AuthenticationService.Logout();
+        StateHasChanged();
     }
 
 }

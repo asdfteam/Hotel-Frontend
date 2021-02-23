@@ -38,7 +38,7 @@
     private const string FixedUri = "http://localhost:5000";
     private string _errorMessage;
 
-    protected override async void OnInitialized()
+    protected override void OnInitialized()
     {
         if (AuthenticationService.User != null)
         {
@@ -54,6 +54,7 @@
         try
         {
             await AuthenticationService.Login(_customerModel);
+            StateHasChanged();
             NavManager.NavigateTo("/mysite");
         }
         catch (Exception e)
