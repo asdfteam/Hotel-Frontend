@@ -1,0 +1,74 @@
+﻿@using Hotel_Frontend.Models
+@using Hotel_Frontend.Services
+@inject IReservationService ReservationService
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavManager
+@inject IJsService IjsService
+@page "/confirmation"
+<div class="card">
+    <div class="card-header">
+        <h3>Confirmation for your reservation</h3>
+    </div>
+    <div class="card-body">
+        <div class="alert">
+            <label>@_errorMessage</label>
+        </div>
+        <div class="flex-row">
+            <p>Check-in date: @_model.StartDate</p>
+        </div>
+        <div class="flex-row">
+            <p>Check-out date: @_model.EndDate</p>
+        </div>
+        <div class="flex-row">
+            <p>Number of single beds: @_model.SingleBeds</p>
+        </div>
+        <div class="flex-row">
+            <p>Number of double beds: @_model.DoubleBeds</p>
+        </div>
+        <div class="flex-row">
+            <p>
+                You will receive the assigned room number for your reservation upon check-in.
+                You can also check the room number on <a href="/mysite">your homepage</a>
+            </p>
+        </div>
+        <div class="text-center">
+            <button type="submit" @onclick="HandleSubmit" class="btn btn-primary mr-1">Submit</button>
+            <button type="reset" @onclick="HandleCancel" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+</div>
+@code {
+    ReservationModel _model;
+    string _errorMessage;
+
+    protected override void OnInitialized()
+    {
+        _model = ReservationService.Reservation;
+        if (_model == null  || AuthenticationService.User == null)
+        {
+            NavManager.NavigateTo("/");
+        }
+        _errorMessage = null;
+    }
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            await ReservationService.PostReservation(AuthenticationService.User.CustomerId, _model);
+            NavManager.NavigateTo("/mysite");
+        }
+        catch (Exception e)
+        {
+            _errorMessage = e.Message;
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleCancel()
+    {
+        await IjsService.IjsRuntime.InvokeAsync<object>("window.alert", "Are you sure you want to cancel?");
+        NavManager.NavigateTo("/");
+    }
+
+}

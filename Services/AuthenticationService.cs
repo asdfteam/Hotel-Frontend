@@ -22,18 +22,18 @@ namespace Hotel_Frontend.Services
         public LoginModel User { get; private set; }
 
         private readonly IHttpClientImpl _httpClient;
-        private readonly ILocalStorageService _localStorage;
+        private readonly IJsService _ijs;
         private readonly NavigationManager _navigationManager;
 
-        public AuthenticationService(ILocalStorageService localStorageService, IHttpClientImpl httpClientImpl, NavigationManager navigationManager)
+        public AuthenticationService(IJsService ijsService, IHttpClientImpl httpClientImpl, NavigationManager navigationManager)
         {
-            _localStorage = localStorageService;
+            _ijs = ijsService;
             _httpClient = httpClientImpl;
             _navigationManager = navigationManager;
         }
         public async Task Initialize()
         {
-            User = await _localStorage.GetItem<LoginModel>("user");
+            User = await _ijs.GetItem<LoginModel>("user");
         }
 
         public async Task Login(LoginModel model)
@@ -47,7 +47,7 @@ namespace Hotel_Frontend.Services
                 User = model;
                 var result = await response.Content.ReadAsStringAsync();
                 User.CustomerId = JsonConvert.DeserializeObject<LoginModel>(result).CustomerId;
-                await _localStorage.SetItem("user", User);
+                await _ijs.SetItem("user", User);
             }
             else
             {
@@ -58,7 +58,7 @@ namespace Hotel_Frontend.Services
         public async Task Logout()
         {
             User = null;
-            await _localStorage.RemoveItem("user");
+            await _ijs.RemoveItem("user");
             _navigationManager.NavigateTo("/");
         }
 

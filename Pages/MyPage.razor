@@ -1,32 +1,55 @@
 ﻿@page "/mysite"
 @inject IAuthenticationService AuthenticationService
 @inject NavigationManager NavManager
+@inject IReservationService ReservationService
 @using HotelLibrary
 @using Hotel_Frontend.Services
+@using System.Reflection.Metadata
 <h2>My page</h2>
 
-<div class="myreservations">
-    <ul>
-        <li>HEllo</li>
-    </ul>
+<div class="card">
+    @if (_loading)
+    {
+    <div class="spinner-border spinner-border-sm"></div>
+    }
+    @if (_reservations != null && _reservations.Count != 0)
+    {
+        <ul>
+            @foreach (var res in _reservations)
+            {
+                <li>
+                    Room number: @res.Room.RoomNumber<br/>
+                    Check-in: @res.StartDate.Date, at @res.StartDate.Hour O'clock.<br/>
+                    Check-out: @res.EndDate.Date, at @res.EndDate.Hour O'clock.<br/>
+                    Amount of single beds: @res.Room.SingleBed<br/>
+                    Amount of double beds: @res.Room.DoubleBed<br/>
+                    <!-- Planen er å legge til knapp/noe annet her slik at customer kan endre status-->
+                </li>
+            }
+        </ul>
+    } 
 </div>
 
 @code {
 
-    protected override async void OnInitialized()
+    bool _loading = false;
+    List<Reservation> _reservations = new List<Reservation>();
+
+    protected override async Task OnInitializedAsync()
     {
-        if (AuthenticationService.User == null)
+        if (AuthenticationService.User != null)
+        {
+            _loading = true;
+            _reservations = await ReservationService.GetReservation(AuthenticationService.User.CustomerId);
+            _loading = false;
+        }
+        else
         {
             NavManager.NavigateTo("/login");
         }
 
-    }
 
-    private List<Reservation> reservations;
 
-    private async void GetReservations()
-    {
-        //Hent reservasjoner...
     }
 
 }

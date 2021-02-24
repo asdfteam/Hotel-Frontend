@@ -22,7 +22,7 @@ namespace Hotel_Frontend
             builder.Services
                 .AddScoped(sp => new HttpClient {BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)})
                 .AddScoped<IHttpClientImpl, HttpClientImpl>()
-                .AddScoped<ILocalStorageService, LocalStorageService>()
+                .AddScoped<IJsService, JsService>()
                 .AddScoped<IAuthenticationService, AuthenticationService>()
                 .AddScoped<IReservationService, ReservationService>();
 

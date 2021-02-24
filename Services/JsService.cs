@@ -5,18 +5,19 @@ using Newtonsoft.Json;
 namespace Hotel_Frontend.Services
 {
 
-    public interface ILocalStorageService
+    public interface IJsService
     {
+        public IJSRuntime IjsRuntime { get; set; }
         Task<T> GetItem<T>(string key);
         Task SetItem<T>(string key, T value);
         Task RemoveItem(string key);
     }
 
-    public class LocalStorageService : ILocalStorageService
+    public class JsService : IJsService
     {
-        private IJSRuntime IjsRuntime { get; set; }
+        public IJSRuntime IjsRuntime { get; set; }
 
-        public LocalStorageService(IJSRuntime ijsRuntime)
+        public JsService(IJSRuntime ijsRuntime)
         {
             IjsRuntime = ijsRuntime;
         }

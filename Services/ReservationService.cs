@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Hotel_Frontend.Models;
+using HotelLibrary;
 using HttpClientImpl;
 using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
 
 namespace Hotel_Frontend.Services
 {
@@ -14,17 +18,15 @@ namespace Hotel_Frontend.Services
          */
         public ReservationModel Reservation { get; set; }
         public void SetReservation(ReservationModel reservation);
-        public ReservationModel GetReservation();
+        public Task<List<Reservation>> GetReservation(int customerid);
         public Task PostReservation(int customerid, ReservationModel model);
     }
     public class ReservationService : IReservationService
     {
         public ReservationModel Reservation { get; set; }
-        private NavigationManager _navigationManager;
         private IHttpClientImpl _httpClientImpl;
-        public ReservationService(NavigationManager navigationManager, IHttpClientImpl httpClientImpl)
+        public ReservationService(IHttpClientImpl httpClientImpl)
         {
-            _navigationManager = navigationManager;
             _httpClientImpl = httpClientImpl;
         }
 
@@ -33,14 +35,22 @@ namespace Hotel_Frontend.Services
             Reservation = reservation;
         }
 
-        public ReservationModel GetReservation()
+        public async Task<List<Reservation>> GetReservation(int customerid)
         {
-            return Reservation;
+            var fixedUri = $"http://localhost:5000/{customerid}";
+            var response = await _httpClientImpl.Get(fixedUri);
+            if (!response.IsSuccessStatusCode) throw new Exception(response.ReasonPhrase);
+            var result = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<Reservation>>(result);
+            
         }
 
-        public Task PostReservation(int customerid, ReservationModel model)
+        public async Task PostReservation(int customerid, ReservationModel model)
         {
-            throw new System.NotImplementedException();
+            var fixedUri = $"http://localhost:5000/{customerid}";
+            var jsonModel = JsonConvert.SerializeObject(model);
+            var response = await _httpClientImpl.Post(fixedUri, jsonModel);
+            if (!response.IsSuccessStatusCode) throw new Exception(response.ReasonPhrase);
         }
     }
 }
