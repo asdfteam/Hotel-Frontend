@@ -39,7 +39,7 @@ namespace Hotel_Frontend.Services
         public async Task Login(LoginModel model)
         {
             
-            const string uri = "http://localhost:5000/login";
+            const string uri = "http://localhost:5000/customers/login";
             var jsonModel = JsonConvert.SerializeObject(model);
             var response = await _httpClient.Post(uri, jsonModel);
             if (response.IsSuccessStatusCode)
@@ -64,7 +64,7 @@ namespace Hotel_Frontend.Services
 
         public async Task RegisterModel(Model model)
         {
-            const string uri = "http://localhost:5000/register";
+            const string uri = "http://localhost:5000/customers/register";
             var jsonModel = JsonConvert.SerializeObject(model);
             var response = await _httpClient.Post(uri, jsonModel);
             if (response.IsSuccessStatusCode)

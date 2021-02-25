@@ -1,6 +1,7 @@
 ﻿@inject IAuthenticationService AuthenticationService
 @page "/logout"
 @using Hotel_Frontend.Services
+@inject AppState AppState
 
 <h3>You have been logged out.</h3>
 
@@ -8,7 +9,7 @@
     protected override async void OnInitialized()
     {
         await AuthenticationService.Logout();
-        StateHasChanged();
+        AppState.Toggle();
     }
 
 }

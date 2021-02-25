@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Hotel_Frontend.Services;
+using Hotel_Frontend.Shared;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,8 @@ namespace Hotel_Frontend
                 .AddScoped<IHttpClientImpl, HttpClientImpl>()
                 .AddScoped<IJsService, JsService>()
                 .AddScoped<IAuthenticationService, AuthenticationService>()
-                .AddScoped<IReservationService, ReservationService>();
+                .AddScoped<IReservationService, ReservationService>()
+                .AddScoped<AppState, AppState>();
 
             var host = builder.Build();
             var authService = host.Services.GetRequiredService<IAuthenticationService>();

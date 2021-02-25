@@ -1,5 +1,6 @@
 ﻿@using Hotel_Frontend.Services
 @inject IAuthenticationService AuthenticationService
+@inject AppState AppState
 
 <div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Hotel Hight</a>
@@ -37,13 +38,19 @@
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool _collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    protected override void OnInitialized()
+    {
+        AppState.OnChange += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    private string NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        _collapseNavMenu = !_collapseNavMenu;
     }
 
 }

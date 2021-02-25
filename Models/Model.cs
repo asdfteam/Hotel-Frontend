@@ -19,7 +19,7 @@ namespace Hotel_Frontend.Models
 
         [Required]
         [Display(Name = "Password")]
-        [StringLength(maximumLength: 100, MinimumLength = 10)]
+        [StringLength(maximumLength: 100, MinimumLength = 5)]
         public new string Password { get; set; }
 
         [Required]

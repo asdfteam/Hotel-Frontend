@@ -1,0 +1,52 @@
+﻿@using Hotel_Frontend.Services
+@using HotelLibrary
+@inject IReservationService ReservationService
+
+<div class="card">
+    <div class="card-header">
+        <h4>Order room service</h4>
+    </div>
+    <div class="card-body">
+        <EditForm EditContext="_editContext" OnSubmit="Callback">
+            <InputText @bind-Value="Note" @onfocus="OnInputFocus"></InputText>
+            <button class="button-index">Send order!</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    public string Note { get; set; }
+    private EditContext _editContext;
+
+    [CascadingParameter(Name = "Reservation")] public Reservation Reservation { get; set; }
+    [Parameter] public Action<bool> OnOrderCompletion { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Note = "Tell us what you want to order =)";
+        _editContext = new EditContext(Note);
+        base.OnInitialized();
+    }
+
+
+    private async void Callback()
+    {
+        try
+        {
+            await ReservationService.PostStatus(Reservation.Room.RoomNumber, Note);
+            Reservation.Room.RoomStatus = "SERVICE";
+            OnOrderCompletion?.Invoke(true);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+
+    private void OnInputFocus()
+    {
+        Note = "";
+        StateHasChanged();
+    }
+
+}

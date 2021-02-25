@@ -4,7 +4,6 @@
 @inject IReservationService ReservationService
 @using HotelLibrary
 @using Hotel_Frontend.Services
-@using System.Reflection.Metadata
 <h2>My page</h2>
 
 <div class="card">
@@ -18,12 +17,34 @@
             @foreach (var res in _reservations)
             {
                 <li>
-                    Room number: @res.Room.RoomNumber<br/>
-                    Check-in: @res.StartDate.Date, at @res.StartDate.Hour O'clock.<br/>
-                    Check-out: @res.EndDate.Date, at @res.EndDate.Hour O'clock.<br/>
-                    Amount of single beds: @res.Room.SingleBed<br/>
-                    Amount of double beds: @res.Room.DoubleBed<br/>
-                    <!-- Planen er å legge til knapp/noe annet her slik at customer kan endre status-->
+                    <div class="card">
+                        <div class="card-body">
+                            <b>Room number:</b> @res.Room.RoomNumber<br />
+                            <b>Check-in:</b> @res.StartDate.Date<br />
+                            <b>Check-out:</b> @res.EndDate.Date<br />
+                            <b>Amount of single beds:</b> @res.Room.SingleBed<br />
+                            <b>Amount of double beds:</b> @res.Room.DoubleBed<br />
+                            @if (valiDate(res))
+                            {
+                                @if (res.Room.RoomStatus != "SERVICE")
+                                {
+                                    <button @onclick="RenderOrderCard">Order service</button>
+                                }
+                                else
+                                {
+                                    <p><b>Room service is ordered and will be delivered soon :)</b></p>
+                                }
+                            }
+                            @if (_renderOrder)
+                            {
+                                <!-- Currently renders OrderService-component for every reservation-->
+
+                                <CascadingValue Value="@res" Name="Reservation">
+                                    <OrderService OnOrderCompletion="OrderCompletion"/>
+                                </CascadingValue>
+                            }
+                        </div>
+                    </div>
                 </li>
             }
         </ul>
@@ -33,6 +54,7 @@
 @code {
 
     bool _loading = false;
+    bool _renderOrder = false;
     List<Reservation> _reservations = new List<Reservation>();
 
     protected override async Task OnInitializedAsync()
@@ -41,15 +63,36 @@
         {
             _loading = true;
             _reservations = await ReservationService.GetReservation(AuthenticationService.User.CustomerId);
+            _reservations.Sort((r1, r2) => DateTime.Compare(r1.StartDate, r2.StartDate));
             _loading = false;
         }
         else
         {
             NavManager.NavigateTo("/login");
         }
+    }
+
+    private void OrderCompletion(bool completedOrder)
+    {
+        if (completedOrder)
+        {
+            RenderOrderCard();
+        }
+    }
+
+    private bool valiDate(Reservation res)
+    {
+        var r1 = DateTime.Compare(res.StartDate, DateTime.Now);
+        var r2 = DateTime.Compare(DateTime.Now, res.EndDate);
+
+        return r1 < 0 && r2 <= 0;
+    }
 
 
-
+    private void RenderOrderCard()
+    {
+        _renderOrder = !_renderOrder;
+        StateHasChanged();
     }
 
 }

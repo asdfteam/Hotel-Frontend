@@ -20,6 +20,8 @@ namespace Hotel_Frontend.Services
         public void SetReservation(ReservationModel reservation);
         public Task<List<Reservation>> GetReservation(int customerid);
         public Task PostReservation(int customerid, ReservationModel model);
+
+        public Task PostStatus(int roomid, string note);
     }
     public class ReservationService : IReservationService
     {
@@ -37,19 +39,26 @@ namespace Hotel_Frontend.Services
 
         public async Task<List<Reservation>> GetReservation(int customerid)
         {
-            var fixedUri = $"http://localhost:5000/{customerid}";
+            var fixedUri = $"http://localhost:5000/reservations/{customerid}";
             var response = await _httpClientImpl.Get(fixedUri);
             if (!response.IsSuccessStatusCode) throw new Exception(response.ReasonPhrase);
             var result = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<List<Reservation>>(result);
-            
         }
 
         public async Task PostReservation(int customerid, ReservationModel model)
         {
-            var fixedUri = $"http://localhost:5000/{customerid}";
+            var fixedUri = $"http://localhost:5000/reservations/{customerid}";
             var jsonModel = JsonConvert.SerializeObject(model);
             var response = await _httpClientImpl.Post(fixedUri, jsonModel);
+            if (!response.IsSuccessStatusCode) throw new Exception(response.ReasonPhrase);
+            Reservation = null;
+        }
+
+        public async Task PostStatus(int roomid, string note)
+        {
+            var FixedUri = $"http://localhost:5000/rooms/{roomid}?newStatus=SERVICE&note={note}";
+            var response = await _httpClientImpl.Put(FixedUri);
             if (!response.IsSuccessStatusCode) throw new Exception(response.ReasonPhrase);
         }
     }

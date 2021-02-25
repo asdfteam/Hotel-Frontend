@@ -15,18 +15,22 @@
             <DataAnnotationsValidator/>
             <div class="form-group">
                 <div class="form-row">
+                    <p><b>Check-In:</b></p>
                     <InputDate @bind-Value="_model.StartDate" class="form-control"></InputDate>
                     <ValidationMessage For="(() => _model.StartDate)"></ValidationMessage>
                 </div>
                 <div class="form-row">
+                    <p><b>Check-Out:</b></p>
                     <InputDate @bind-Value="_model.EndDate" class="form-control"></InputDate>
                     <ValidationMessage For="(() => _model.EndDate)"></ValidationMessage>
                 </div>
                 <div class="form-row">
+                    <p><b>Number of single beds:</b></p>
                     <InputNumber @bind-Value="_model.SingleBeds" class="form-control"></InputNumber>
                     <ValidationMessage For="(() => _model.SingleBeds)"></ValidationMessage>
                 </div>
                 <div class="form-row">
+                    <p><b>Number of double beds:</b></p>
                     <InputNumber @bind-Value="_model.DoubleBeds" class="form-control"></InputNumber>
                     <ValidationMessage For="(() => _model.DoubleBeds)"></ValidationMessage>
                 </div>
@@ -41,7 +45,11 @@
 
 @code {
     EditContext _editContext;
-    ReservationModel _model = new ReservationModel();
+    ReservationModel _model = new ReservationModel
+    {
+        StartDate = DateTime.Today,
+        EndDate = DateTime.Today.AddDays(2)
+    };
 
     protected override void OnInitialized()
     {
