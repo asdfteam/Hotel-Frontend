@@ -28,20 +28,18 @@
                             {
                                 @if (res.Room.RoomStatus != "SERVICE")
                                 {
-                                    <button @onclick="RenderOrderCard">Order service</button>
+                                    <button @onclick="RenderOrderCard" value="@res.Room.RoomNumber">Order service</button>
+                                    @if (_renderOrder)
+                                    {
+                                        <CascadingValue Value="@res" Name="Reservation">
+                                            <OrderService OnOrderCompletion="OrderCompletion"/>
+                                        </CascadingValue>
+                                    }
                                 }
                                 else
                                 {
                                     <p><b>Room service is ordered and will be delivered soon :)</b></p>
                                 }
-                            }
-                            @if (_renderOrder)
-                            {
-                                <!-- Currently renders OrderService-component for every reservation-->
-
-                                <CascadingValue Value="@res" Name="Reservation">
-                                    <OrderService OnOrderCompletion="OrderCompletion"/>
-                                </CascadingValue>
                             }
                         </div>
                     </div>

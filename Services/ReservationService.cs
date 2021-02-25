@@ -57,8 +57,8 @@ namespace Hotel_Frontend.Services
 
         public async Task PostStatus(int roomid, string note)
         {
-            var FixedUri = $"http://localhost:5000/rooms/{roomid}?newStatus=SERVICE&note={note}";
-            var response = await _httpClientImpl.Put(FixedUri);
+            var fixedUri = $"http://localhost:5000/rooms/{roomid}?newStatus=SERVICE&note={note}";
+            var response = await _httpClientImpl.Put(fixedUri);
             if (!response.IsSuccessStatusCode) throw new Exception(response.ReasonPhrase);
         }
     }
