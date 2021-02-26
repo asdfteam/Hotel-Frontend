@@ -2,7 +2,6 @@
 @using Hotel_Frontend.Models
 @using Hotel_Frontend.Services
 @using HttpClientImpl
-@using Newtonsoft.Json
 @inject IHttpClientImpl HttpClientImpl
 @inject NavigationManager NavManager
 @inject IAuthenticationService AuthenticationService
@@ -12,7 +11,7 @@
 <div class="card m-2">
     <h3 class="card-header">Login</h3>
     <div class="card-body">
-        <EditForm EditContext="@_editContext" OnValidSubmit="Callback" @onreset="HandleReset">
+        <EditForm EditContext="@_editContext" OnValidSubmit="Callback">
             <div class="alert">
                 <label>@_errorMessage</label>
             </div>
@@ -84,11 +83,4 @@
             StateHasChanged();
         }
     }
-
-    private void HandleReset()
-    {
-        _customerModel = new LoginModel();
-        _editContext = new EditContext(_customerModel);
-    }
-
 }

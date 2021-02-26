@@ -10,8 +10,8 @@ namespace Hotel_Frontend.Models
     public class Model : Customer
     {
         [Required]
-        [Display(Name = "Full name")]
-        public string Name { get; set; }
+        [Display(Name = "CustomerName")]
+        public new string CustomerName { get; set; }
 
         [Required]
         [Display(Name = "Username")]
@@ -19,7 +19,7 @@ namespace Hotel_Frontend.Models
 
         [Required]
         [Display(Name = "Password")]
-        [StringLength(maximumLength: 100, MinimumLength = 5)]
+        [StringLength(maximumLength:50)]
         public new string Password { get; set; }
 
         [Required]
