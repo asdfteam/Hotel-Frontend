@@ -1,6 +1,8 @@
 ﻿@page "/"
+@using Hotel_Frontend.Services
+@inject IAuthenticationService AuthenticationService
 
-<div class="body">
+<div class="body-new">
     <div class="card">
         <div class="card-header"><h1>Hotel Hight</h1></div>
         <div class="card-body">
@@ -9,11 +11,11 @@
     </div>
     @if (ShowReservationForm)
     {
-        <button class="button-index" @onclick="SetVisibility">Hide Form</button>
+        <button class="button-index" @onclick="SetVisibility">Click to hide</button>
     }
     else
     {
-        <button class="button-index" @onclick="SetVisibility">Show Form</button>
+        <button class="button-index" @onclick="SetVisibility">Make a new reservation!</button>
     }
     <div class="card">
         @if (ShowReservationForm)
@@ -21,6 +23,7 @@
             <NewReservation />
         }
     </div>
+    <img src="hotel.jpg" alt="Photo of hotel entrance" width="800" height="600" />
 </div>
 
 @code
@@ -32,10 +35,10 @@
         ShowReservationForm = !ShowReservationForm;
     }
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
         ShowReservationForm = false;
-        base.OnInitialized();
+        await AuthenticationService.Initialize();
     }
 }
 

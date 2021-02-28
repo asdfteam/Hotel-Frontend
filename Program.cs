@@ -28,10 +28,6 @@ namespace Hotel_Frontend
                 .AddScoped<IReservationService, ReservationService>()
                 .AddScoped<AppState, AppState>();
 
-            var host = builder.Build();
-            var authService = host.Services.GetRequiredService<IAuthenticationService>();
-            await authService.Initialize();
-
             await builder.Build().RunAsync();
         }
     }

@@ -10,9 +10,10 @@
    .button-index {
        margin: 10px;
    }
-   .body {
-       position: relative;
-       -ms-flex-direction: column;
+   .body-new {
+       display: flex;
        flex-direction: column;
+       flex-wrap: wrap;
+       justify-content: center;
    }
 /*# sourceMappingURL=bootstrap.min.css.map */
